@@ -1,3 +1,4 @@
+exclude: 'poetry.lock|package-lock.json'
 repos:
 - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
   rev: v2.4.0
