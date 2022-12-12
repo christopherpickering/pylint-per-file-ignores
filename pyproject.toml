@@ -29,7 +29,7 @@ tomli = { version = "^2.0.1", python = "<3.11" }
 black = "^22.10.0"
 isort = "^5.10.1"
 flake8 = "^5.0.4"
-tox = "^3.27.1"
+tox = "^4.0.0"
 pylint = "^2.15.5"
 
 [tool.pylint.messages_control]
