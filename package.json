@@ -1,17 +1,17 @@
 {
   "name": "pylint-per-file-ignores",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "This pylint plugin will enable per-file-ignores in your project!",
   "scripts": {
     "commit": "git add . && pre-commit run && cz --no-verify"
   },
   "devDependencies": {
-    "@semantic-release/changelog": "6.0.1",
+    "@semantic-release/changelog": "6.0.2",
     "@semantic-release/commit-analyzer": "9.0.2",
     "@semantic-release/exec": "6.0.3",
     "@semantic-release/git": "10.0.1",
-    "@semantic-release/github": "8.0.6",
+    "@semantic-release/github": "8.0.7",
     "@semantic-release/npm": "9.0.1",
     "@semantic-release/release-notes-generator": "10.0.3",
     "cz-conventional-changelog": "3.3.0",
