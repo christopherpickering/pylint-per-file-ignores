@@ -62,6 +62,7 @@ class DoSuppress:
         self.linter = linter
         self.message_id_or_symbol = message_id_or_symbol
         self.test_func = test_func
+        self.resolved_symbols = None
 
     def __call__(self, chain, node):
         with Suppress(self.linter) as s:
@@ -83,6 +84,8 @@ class DoSuppress:
         # Therefore here, we try the new attribute name, and fall back to the old
         # version for compatability with <=1.2 and >=1.3
 
+        if self.resolved_symbols is not None:
+            return self.resolved_symbols
         try:
             pylint_messages = self.get_message_definitions(self.message_id_or_symbol)
             the_symbols = [
@@ -95,7 +98,7 @@ class DoSuppress:
             # This can happen due to mismatches of pylint versions and plugin
             # expectations of available messages
             the_symbols = [self.message_id_or_symbol]
-
+        self.resolved_symbols = the_symbols
         return the_symbols
 
     def get_message_definitions(self, message_id_or_symbol):
