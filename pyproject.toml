@@ -19,7 +19,7 @@ license = "MIT"
 name = "pylint-per-file-ignores"
 readme = "readme.md"
 repository = "https://github.com/christopherpickering/pylint-per-file-ignores.git"
-version = "1.1.0"
+version = "1.2.0"
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
