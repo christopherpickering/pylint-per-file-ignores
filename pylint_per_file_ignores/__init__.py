@@ -140,6 +140,27 @@ class Chain:
         self.old_method(self.node)
 
 
+def get_message_definitions(linter, message_id_or_symbol):
+    """
+    Lookup that onverts a symbol or message string into a unified message.
+    """
+    msgs_store = getattr(linter, "msgs_store", linter)
+
+    if hasattr(msgs_store, "check_message_id"):
+        return [msgs_store.check_message_id(message_id_or_symbol)]
+    # pylint 2.0 renamed check_message_id to get_message_definition in:
+    # https://github.com/PyCQA/pylint/commit/5ccbf9eaa54c0c302c9180bdfb745566c16e416d
+    if hasattr(msgs_store, "get_message_definition"):
+        return [msgs_store.get_message_definition(message_id_or_symbol)]
+    # pylint 2.3.0 renamed get_message_definition to get_message_definitions in:
+    # https://github.com/PyCQA/pylint/commit/da67a9da682e51844fbc674229ff6619eb9c816a
+    if hasattr(msgs_store, "get_message_definitions"):
+        return msgs_store.get_message_definitions(message_id_or_symbol)
+
+    msg = "pylint.utils.MessagesStore does not have a get_message_definition(s) method"
+    raise ValueError(msg)
+
+
 def augment_all_visit(linter, message_id_or_symbol, augmentation):
     """
     Augmenting a visit enables additional errors to be raised (although that case is
@@ -172,7 +193,9 @@ def augment_add_message(linter, message_id_or_symbol, test_func):
     add_message_method = getattr(checker, "add_message")
 
     def add_message(*args, **kwargs):
-        if test_func(None) and args[0] == message_id_or_symbol:
+        if test_func(None) and get_message_definitions(
+            linter, args[0]
+        ) == get_message_definitions(linter, message_id_or_symbol):
             return
         add_message_method(*args, **kwargs)
 
