@@ -15,7 +15,7 @@
     "@semantic-release/npm": "10.0.4",
     "@semantic-release/release-notes-generator": "11.0.3",
     "cz-conventional-changelog": "3.3.0",
-    "semantic-release": "21.0.5"
+    "semantic-release": "21.0.6"
   },
   "config": {
     "commitizen": {
