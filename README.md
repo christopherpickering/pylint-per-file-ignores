@@ -14,9 +14,7 @@ pip install pylint-per-file-ignores
 
 ## Add to Pylint Settings
 
-Edit your `pyproject.toml`:
-
-```
+```toml
 [tool.pylint.MASTER]
 load-plugins=[
     "pylint_per_file_ignores",
@@ -27,9 +25,36 @@ load-plugins=[
 
 ## Usage
 
-Add a section to your `pyproject.toml` with the patterns and codes you would like to ignore.
+Add list of patterns and codes you would like to ignore.
 
+### Using native pylint settings
+
+Section "MESSAGES CONTROL". Examples:
+
+```ini
+# setup.cfg
+
+[pylint.MESSAGES CONTROL]
+per-file-ignores =
+  /folder_1/:missing-function-docstring,W0621,W0240,C0115
+  file.py:C0116,E0001
 ```
+
+```toml
+# pyproject.toml
+
+[tool.pylint.'MESSAGES CONTROL']
+per-file-ignores = [
+    "/folder_1/:missing-function-docstring,W0621,W0240,C0115",
+    "file.py:C0116,E0001"
+]
+```
+
+### Using custom `pyproject.toml` section
+
+For backwards compatibility only. Example:
+
+```toml
 [tool.pylint-per-file-ignores]
 "/folder_1/"="missing-function-docstring,W0621,W0240,C0115"
 "file.py"="C0116,E0001"
