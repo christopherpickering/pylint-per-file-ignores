@@ -251,7 +251,9 @@ def load_configuration(linter: PyLinter) -> None:
     if not isinstance(linter.config.per_file_ignores, dict):
         linter.config.per_file_ignores = dict(
             config_item.split(":")
-            for config_item in utils._splitstrip(linter.config.per_file_ignores, sep="\n")
+            for config_item in utils._splitstrip(
+                linter.config.per_file_ignores, sep="\n"
+            )
         )
 
     for file_path, rules in linter.config.per_file_ignores.items():
