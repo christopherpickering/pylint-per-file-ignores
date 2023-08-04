@@ -27,10 +27,10 @@ tomli = {version = "^2.0.1", python = "<3.11"}
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.0.0"
-flake8 = "6.0.0"
 isort = "^5.10.1"
-pylint = "^2.15.8"
+ruff = "^0.0.282"
 tox = "^4.0.8"
 
-[tool.pylint.messages_control]
-disable = "C0116,C0301,C0114,R0901,C0115,R0903,W0201,C0103"
+[tool.ruff]
+ignore = ["B009", "B010"]
+select = ["E", "F", "I", "S", "T20", "PL", "B"]
