@@ -2,6 +2,8 @@ import re
 from pathlib import Path
 from typing import List, Optional
 
+from pylint import utils
+from pylint.checkers import BaseChecker
 from pylint.exceptions import UnknownMessageError
 from pylint.lint import PyLinter
 
@@ -18,8 +20,6 @@ def find_pyproject(src) -> Optional[Path]:
 
         if pyproject.is_file():
             return pyproject
-
-    raise ValueError("Could not find pyproject.toml file in the project.")
 
 
 def get_checker_by_msg(linter, msg):
@@ -227,14 +227,45 @@ class IsFile:
         )
 
 
-def register(linter: "PyLinter") -> None:
-    """This required method auto registers the checker during initialization.
+class PerFileIgnoresChecker(BaseChecker):
+    # Just to register custom config option
+    options = (
+        (
+            "per-file-ignores",
+            {
+                "default": "",
+                "type": "string",
+                "metavar": "<str>",
+                "help": "Newline-separated list of ignores",
+            },
+        ),
+    )
 
-    :param linter: The linter to register the checker to.
-    """
-    content = tomllib.load(find_pyproject(linter.current_file).open("rb"))
-    ignores = {**content["tool"]["pylint-per-file-ignores"]}
 
-    for file_path, rules in ignores.items():
+def register(linter: PyLinter) -> None:
+    linter.register_checker(PerFileIgnoresChecker(linter))
+
+
+def load_configuration(linter: PyLinter) -> None:
+    # Loading configuration from native pylint configuration mechanism
+    if not isinstance(linter.config.per_file_ignores, dict):
+        linter.config.per_file_ignores = dict(
+            config_item.split(":")
+            for config_item in utils._splitstrip(
+                linter.config.per_file_ignores, sep="\n"
+            )
+        )
+
+    for file_path, rules in linter.config.per_file_ignores.items():
         for rule in rules.split(","):
             disable_message(linter, rule.strip(), IsFile(file_path, linter))
+
+    # Loading custom pyproject.toml
+    pyproject_file = find_pyproject(linter.current_file)
+    if pyproject_file:
+        content = tomllib.load(pyproject_file).open("rb")
+        ignores = {**content["tool"]["pylint-per-file-ignores"]}
+
+        for file_path, rules in ignores.items():
+            for rule in rules.split(","):
+                disable_message(linter, rule.strip(), IsFile(file_path, linter))
