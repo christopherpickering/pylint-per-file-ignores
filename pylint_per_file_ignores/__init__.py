@@ -266,7 +266,7 @@ def load_configuration(linter: PyLinter) -> None:
         with pyproject_file.open("rb") as f:
             content = tomllib.load(f)
             ignores = {**content["tool"]["pylint-per-file-ignores"]}
-    
+
             for file_path, rules in ignores.items():
                 for rule in rules.split(","):
                     disable_message(linter, rule.strip(), IsFile(file_path, linter))
