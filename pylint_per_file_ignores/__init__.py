@@ -263,8 +263,9 @@ def load_configuration(linter: PyLinter) -> None:
     # Loading custom pyproject.toml
     pyproject_file = find_pyproject(linter.current_file)
     if pyproject_file:
-        content = tomllib.load(pyproject_file).open("rb")
-        ignores = {**content["tool"]["pylint-per-file-ignores"]}
+        with open(pyproject_file, "rb") as pyproject_file_object:
+            content = tomllib.load(pyproject_file_object)
+            ignores = {**content["tool"]["pylint-per-file-ignores"]}
 
         for file_path, rules in ignores.items():
             for rule in rules.split(","):
