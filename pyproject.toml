@@ -28,7 +28,7 @@ tomli = {version = "^2.0.1", python = "<3.11"}
 [tool.poetry.group.dev.dependencies]
 black = "^23.0.0"
 isort = "^5.10.1"
-ruff = "^0.0.292"
+ruff = "^0.1.0"
 tox = "^4.0.8"
 
 [tool.ruff]
