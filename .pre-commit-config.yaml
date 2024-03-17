@@ -12,7 +12,7 @@ repos:
   - id: end-of-file-fixer
   - id: check-toml
 - repo: https://github.com/PyCQA/autoflake
-  rev: v2.3.0
+  rev: v2.3.1
   hooks:
   - id: autoflake
     exclude: &fixtures tests/functional/|tests/input|tests/extensions/data|tests/regrtest_data/|tests/data/|__init__.py
