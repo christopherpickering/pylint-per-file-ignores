@@ -257,7 +257,9 @@ def load_configuration(linter: PyLinter) -> None:
         )
 
     for file_path, rules in linter.config.per_file_ignores.items():
-        for rule in rules.split(","):
+        if not isinstance(rules, list):
+            rules = rules.split(",")
+        for rule in rules:
             disable_message(linter, rule.strip(), IsFile(file_path, linter))
 
     # Loading custom pyproject.toml
@@ -268,5 +270,7 @@ def load_configuration(linter: PyLinter) -> None:
             ignores = {**content.get("tool", {}).get("pylint-per-file-ignores", {})}
 
         for file_path, rules in ignores.items():
-            for rule in rules.split(","):
+            if not isinstance(rules, list):
+                rules = rules.split(",")
+            for rule in rules:
                 disable_message(linter, rule.strip(), IsFile(file_path, linter))
