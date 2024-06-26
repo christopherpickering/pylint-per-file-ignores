@@ -6,7 +6,7 @@ This pylint plugin will enable per-file-ignores in your project!
 
 ```
 # w/ poetry
-poetry add --dev pylint-per-file-ignores
+poetry add pylint-per-file-ignores --group dev
 
 # w/ pip
 pip install pylint-per-file-ignores
