@@ -6,7 +6,7 @@ repos:
   - id: pretty-format-toml
     args: [--autofix]
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.6.0
+  rev: v5.0.0
   hooks:
   - id: trailing-whitespace
   - id: end-of-file-fixer
@@ -23,7 +23,7 @@ repos:
     - --remove-duplicate-keys
     - --remove-unused-variables
 - repo: https://github.com/asottile/pyupgrade
-  rev: v3.17.0
+  rev: v3.19.0
   hooks:
   - id: pyupgrade
     args: [--py36-plus]
@@ -34,6 +34,6 @@ repos:
     exclude: docs*
     additional_dependencies: [toml]
 - repo: https://github.com/psf/black
-  rev: 24.4.2
+  rev: 24.10.0
   hooks:
   - id: black
