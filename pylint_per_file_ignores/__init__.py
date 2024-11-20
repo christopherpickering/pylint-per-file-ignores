@@ -1,6 +1,6 @@
 import re
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Iterable
 
 from pylint import utils
 from pylint.checkers import BaseChecker
@@ -248,14 +248,21 @@ def register(linter: PyLinter) -> None:
 
 def load_configuration(linter: PyLinter) -> None:
     # Loading configuration from native pylint configuration mechanism
-    if not isinstance(linter.config.per_file_ignores, dict):
+    if isinstance(linter.config.per_file_ignores, str):
         linter.config.per_file_ignores = dict(
             config_item.split(":")
             for config_item in utils._splitstrip(
                 linter.config.per_file_ignores, sep="\n"
             )
         )
-
+    elif not isinstance(linter.config.per_file_ignores, dict):
+        linter.config.per_file_ignores = dict(
+            config_item.strip().split(":")
+            for config_item in linter.config.per_file_ignores
+            )
+        )
+    # else: assert isinstance(linter.config.per_file_ignores, dict)
+        
     for file_path, rules in linter.config.per_file_ignores.items():
         for rule in rules.split(","):
             disable_message(linter, rule.strip(), IsFile(file_path, linter))
