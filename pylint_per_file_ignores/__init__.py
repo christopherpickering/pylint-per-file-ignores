@@ -1,6 +1,6 @@
 import re
 from pathlib import Path
-from typing import List, Optional, Iterable
+from typing import List, Optional
 
 from pylint import utils
 from pylint.checkers import BaseChecker
