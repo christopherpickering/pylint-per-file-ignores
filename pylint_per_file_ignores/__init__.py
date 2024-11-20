@@ -262,7 +262,7 @@ def load_configuration(linter: PyLinter) -> None:
             )
         )
     # else: assert isinstance(linter.config.per_file_ignores, dict)
-        
+
     for file_path, rules in linter.config.per_file_ignores.items():
         for rule in rules.split(","):
             disable_message(linter, rule.strip(), IsFile(file_path, linter))
