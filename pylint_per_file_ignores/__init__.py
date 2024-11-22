@@ -259,7 +259,6 @@ def load_configuration(linter: PyLinter) -> None:
         linter.config.per_file_ignores = dict(
             config_item.strip().split(":")
             for config_item in linter.config.per_file_ignores
-            )
         )
     # else: assert isinstance(linter.config.per_file_ignores, dict)
 

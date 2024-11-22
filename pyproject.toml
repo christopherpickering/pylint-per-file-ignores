@@ -5,7 +5,7 @@ requires = ["poetry-core>=1.0.0"]
 [tool]
 
 [tool.black]
-max_line_length = 99
+line-length = 99
 quiet = true
 
 [tool.isort]
