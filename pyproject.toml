@@ -33,4 +33,5 @@ tox = "^4.0.8"
 
 [tool.ruff]
 ignore = ["B009", "B010"]
+line-length = 99  # Ensure same line-length as for Black, above.
 select = ["E", "F", "I", "S", "T20", "PL", "B"]
