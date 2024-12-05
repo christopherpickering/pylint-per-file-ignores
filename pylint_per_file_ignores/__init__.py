@@ -115,10 +115,7 @@ class DoSuppress:
         if hasattr(msgs_store, "get_message_definitions"):
             return msgs_store.get_message_definitions(message_id_or_symbol)
 
-        msg = (
-            "pylint.utils.MessagesStore does not have a "
-            "get_message_definition(s) method"
-        )
+        msg = "pylint.utils.MessagesStore does not have a " "get_message_definition(s) method"
         raise ValueError(msg)
 
 
@@ -193,9 +190,9 @@ def augment_add_message(linter, message_id_or_symbol, test_func):
     add_message_method = getattr(checker, "add_message")
 
     def add_message(*args, **kwargs):
-        if test_func(None) and get_message_definitions(
-            linter, args[0]
-        ) == get_message_definitions(linter, message_id_or_symbol):
+        if test_func(None) and get_message_definitions(linter, args[0]) == get_message_definitions(
+            linter, message_id_or_symbol
+        ):
             return
         add_message_method(*args, **kwargs)
 
@@ -221,9 +218,7 @@ class IsFile:
 
     def __call__(self, node):
         return bool(
-            re.search(
-                self.file_string, Path(self.linter.current_file).as_posix(), re.VERBOSE
-            )
+            re.search(self.file_string, Path(self.linter.current_file).as_posix(), re.VERBOSE)
         )
 
 
@@ -248,13 +243,16 @@ def register(linter: PyLinter) -> None:
 
 def load_configuration(linter: PyLinter) -> None:
     # Loading configuration from native pylint configuration mechanism
-    if not isinstance(linter.config.per_file_ignores, dict):
+    if isinstance(linter.config.per_file_ignores, str):
         linter.config.per_file_ignores = dict(
             config_item.split(":")
-            for config_item in utils._splitstrip(
-                linter.config.per_file_ignores, sep="\n"
-            )
+            for config_item in utils._splitstrip(linter.config.per_file_ignores, sep="\n")
         )
+    elif not isinstance(linter.config.per_file_ignores, dict):
+        linter.config.per_file_ignores = dict(
+            config_item.strip().split(":") for config_item in linter.config.per_file_ignores
+        )
+    # else: assert isinstance(linter.config.per_file_ignores, dict)
 
     for file_path, rules in linter.config.per_file_ignores.items():
         for rule in rules.split(","):
