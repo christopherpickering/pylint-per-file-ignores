@@ -241,12 +241,37 @@ def register(linter: PyLinter) -> None:
     linter.register_checker(PerFileIgnoresChecker(linter))
 
 
+def parse_string(input_string: str) -> list[str]:
+    # For backward compatybility
+    if "\n" in input_string:
+        return utils._splitstrip(input_string, sep="\n")
+
+    parts = input_string.split(",")
+
+    result = []
+    current_file = None
+    current_errors = []
+    for part in parts:
+        if ":" in part:
+            if current_file is not None:
+                result.append(f"{current_file}:{','.join(current_errors)}")
+
+            current_file, error = part.split(":", 1)
+            current_errors = [error]
+        else:
+            current_errors.append(part)
+
+    if current_file is not None:
+        result.append(f"{current_file}:{','.join(current_errors)}")
+
+    return result
+
+
 def load_configuration(linter: PyLinter) -> None:
     # Loading configuration from native pylint configuration mechanism
     if isinstance(linter.config.per_file_ignores, str):
         linter.config.per_file_ignores = dict(
-            config_item.split(":")
-            for config_item in utils._splitstrip(linter.config.per_file_ignores, sep="\n")
+            config_item.split(":") for config_item in parse_string(linter.config.per_file_ignores)
         )
     elif not isinstance(linter.config.per_file_ignores, dict):
         linter.config.per_file_ignores = dict(

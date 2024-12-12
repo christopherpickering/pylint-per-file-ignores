@@ -43,7 +43,7 @@ per-file-ignores =
 ```toml
 # pyproject.toml
 
-[tool.pylint.'MESSAGES CONTROL']
+[tool.pylint.'messages control']
 per-file-ignores = [
     "/folder_1/:missing-function-docstring,W0621,W0240,C0115",
     "file.py:C0116,E0001"
