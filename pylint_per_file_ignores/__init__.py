@@ -115,10 +115,7 @@ class DoSuppress:
         if hasattr(msgs_store, "get_message_definitions"):
             return msgs_store.get_message_definitions(message_id_or_symbol)
 
-        msg = (
-            "pylint.utils.MessagesStore does not have a "
-            "get_message_definition(s) method"
-        )
+        msg = "pylint.utils.MessagesStore does not have a " "get_message_definition(s) method"
         raise ValueError(msg)
 
 
@@ -193,9 +190,9 @@ def augment_add_message(linter, message_id_or_symbol, test_func):
     add_message_method = getattr(checker, "add_message")
 
     def add_message(*args, **kwargs):
-        if test_func(None) and get_message_definitions(
-            linter, args[0]
-        ) == get_message_definitions(linter, message_id_or_symbol):
+        if test_func(None) and get_message_definitions(linter, args[0]) == get_message_definitions(
+            linter, message_id_or_symbol
+        ):
             return
         add_message_method(*args, **kwargs)
 
@@ -221,9 +218,7 @@ class IsFile:
 
     def __call__(self, node):
         return bool(
-            re.search(
-                self.file_string, Path(self.linter.current_file).as_posix(), re.VERBOSE
-            )
+            re.search(self.file_string, Path(self.linter.current_file).as_posix(), re.VERBOSE)
         )
 
 
@@ -246,15 +241,43 @@ def register(linter: PyLinter) -> None:
     linter.register_checker(PerFileIgnoresChecker(linter))
 
 
+def parse_string(input_string: str) -> list[str]:
+    # For backward compatybility
+    if "\n" in input_string:
+        return utils._splitstrip(input_string, sep="\n")
+
+    parts = input_string.split(",")
+
+    result = []
+    current_file = None
+    current_errors = []
+    for part in parts:
+        if ":" in part:
+            if current_file is not None:
+                result.append(f"{current_file}:{','.join(current_errors)}")
+
+            current_file, error = part.split(":", 1)
+            current_errors = [error]
+        else:
+            current_errors.append(part)
+
+    if current_file is not None:
+        result.append(f"{current_file}:{','.join(current_errors)}")
+
+    return result
+
+
 def load_configuration(linter: PyLinter) -> None:
     # Loading configuration from native pylint configuration mechanism
-    if not isinstance(linter.config.per_file_ignores, dict):
+    if isinstance(linter.config.per_file_ignores, str):
         linter.config.per_file_ignores = dict(
-            config_item.split(":")
-            for config_item in utils._splitstrip(
-                linter.config.per_file_ignores, sep="\n"
-            )
+            config_item.split(":") for config_item in parse_string(linter.config.per_file_ignores)
         )
+    elif not isinstance(linter.config.per_file_ignores, dict):
+        linter.config.per_file_ignores = dict(
+            config_item.strip().split(":") for config_item in linter.config.per_file_ignores
+        )
+    # else: assert isinstance(linter.config.per_file_ignores, dict)
 
     for file_path, rules in linter.config.per_file_ignores.items():
         for rule in rules.split(","):
