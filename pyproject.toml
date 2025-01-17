@@ -19,7 +19,7 @@ license = "MIT"
 name = "pylint-per-file-ignores"
 readme = "README.md"
 repository = "https://github.com/christopherpickering/pylint-per-file-ignores.git"
-version = "1.3.5"
+version = "1.3.6"
 
 [tool.poetry.dependencies]
 python = "^3.8.1"
@@ -28,10 +28,12 @@ tomli = {version = "^2.0.1", python = "<3.11"}
 [tool.poetry.group.dev.dependencies]
 black = "^24.0.0"
 isort = "^5.10.1"
-ruff = "^0.4.0"
+ruff = "^0.9.0"
 tox = "^4.0.8"
 
 [tool.ruff]
-ignore = ["B009", "B010"]
 line-length = 99  # Ensure same line-length as for Black, above.
+
+[tool.ruff.lint]
+ignore = ["B009", "B010"]
 select = ["E", "F", "I", "S", "T20", "PL", "B"]
