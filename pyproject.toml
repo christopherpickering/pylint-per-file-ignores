@@ -32,6 +32,8 @@ ruff = "^0.9.0"
 tox = "^4.0.8"
 
 [tool.ruff]
-ignore = ["B009", "B010"]
 line-length = 99  # Ensure same line-length as for Black, above.
+
+[tool.ruff.lint]
+ignore = ["B009", "B010"]
 select = ["E", "F", "I", "S", "T20", "PL", "B"]
