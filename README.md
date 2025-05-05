@@ -32,6 +32,14 @@ Add list of patterns and codes you would like to ignore.
 Section "MESSAGES CONTROL". Examples:
 
 ```ini
+# .pylintrc
+
+[MESSAGES CONTROL]
+per-file-ignores =
+  .*_test\.py:protected-access # ignore "protected-access" errors in test files ending in "_test.py"
+```
+
+```ini
 # setup.cfg
 
 [pylint.MESSAGES CONTROL]
