@@ -1,3 +1,5 @@
+> This project is now managed from https://github.com/kasium/pylint-per-file-ignores.
+
 # Pylint Per File Ignores 😲
 
 This pylint plugin will enable per-file-ignores in your project!
